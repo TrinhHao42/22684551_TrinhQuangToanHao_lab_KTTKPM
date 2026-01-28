@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const {
   signAccessToken,
   signRefreshToken,
@@ -9,13 +8,13 @@ const users = [
   {
     id: 1,
     email: "admin@gmail.com",
-    passwordHash: bcrypt.hashSync("123456", 10),
+    passwordHash: "123456",
     role: "admin"
   },
   {
     id: 2,
     email: "guest@gmail.com",
-    passwordHash: bcrypt.hashSync("123456", 10),
+    passwordHash: "123456",
     role: "guest"
   }
 ];
@@ -28,18 +27,19 @@ exports.login = async (req, res) => {
     return res.status(401).json({ error: "Invalid credentials" });
   }
 
-  const ok = await bcrypt.compare(password, user.passwordHash);
+  const ok = password === user.passwordHash;
   if (!ok) {
     return res.status(401).json({ error: "Invalid credentials" });
   }
 
   const payload = {
-    userId: user.id,
+    userId: user.email,
     role: user.role
   };
 
   const accessToken = signAccessToken(payload);
   const refreshToken = signRefreshToken(payload);
+
 
   return res.json({
     accessToken,
