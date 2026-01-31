@@ -1,3 +1,5 @@
+import readline from "readline";
+
 class Notification {
   async send(message) {
     throw new Error("send() must be implemented");
@@ -20,7 +22,6 @@ class SMSNotification extends Notification {
 
 class NotificationFactory {
   static async createNotification(type) {
-
     await new Promise((resolve) => setTimeout(resolve, 300));
 
     switch (type) {
@@ -34,8 +35,27 @@ class NotificationFactory {
   }
 }
 
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+function ask(question) {
+  return new Promise((resolve) => rl.question(question, resolve));
+}
+
 (async () => {
-  const notifier = await NotificationFactory.createNotification("email");
-  const result = await notifier.send("Hello Design Patterns");
-  console.log(result);
+  try {
+    const type = await ask("Nhập loại thông báo (email | sms): ");
+    const message = await ask("Nhập nội dung thông báo: ");
+
+    const notifier = await NotificationFactory.createNotification(type.trim());
+    const result = await notifier.send(message);
+
+    console.log(result);
+  } catch (error) {
+    console.error("Lỗi:", error.message);
+  } finally {
+    rl.close();
+  }
 })();
