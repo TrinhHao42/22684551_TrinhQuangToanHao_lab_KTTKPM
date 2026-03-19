@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('./partials/nav', { user }) %>
+  <div class="container">
+    <div class="card">
+      <h2>Microkernel Core Dashboard</h2>
+      <p>Core chịu trách nhiệm authentication, authorization, plugin lifecycle và event hooks.</p>
+      <div class="grid">
+        <div class="card"><h3><%= stats.users %></h3><p>Users</p></div>
+        <div class="card"><h3><%= stats.posts %></h3><p>Posts</p></div>
+        <div class="card"><h3><%= stats.menus %></h3><p>Menus</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Registered Plugins</h3>
+      <table>
+        <thead><tr><th>Name</th><th>Description</th></tr></thead>
+        <tbody>
+          <% plugins.forEach((p) => { %>
+            <tr><td><%= p.name %></td><td><%= p.description %></td></tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

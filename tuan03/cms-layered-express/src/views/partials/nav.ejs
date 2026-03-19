@@ -1,0 +1,43 @@
+<style>
+  :root {
+    --bg: #0d1b2a;
+    --card: #1b263b;
+    --soft: #415a77;
+    --text: #e0e1dd;
+    --accent: #e09f3e;
+  }
+  body { margin: 0; font-family: "Segoe UI", sans-serif; background: radial-gradient(circle at top, #1b263b, #0d1b2a); color: var(--text); }
+  .topbar { display: flex; justify-content: space-between; padding: 14px 24px; background: rgba(13, 27, 42, 0.85); border-bottom: 1px solid #2b3d56; }
+  .links a { color: var(--text); margin-right: 16px; text-decoration: none; }
+  .links a:hover { color: var(--accent); }
+  .badge { background: #2d5d7b; border-radius: 999px; padding: 4px 10px; font-size: 12px; }
+  .container { max-width: 1000px; margin: 24px auto; padding: 0 16px; }
+  .card { background: rgba(27, 38, 59, 0.9); border: 1px solid #324b68; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .btn { background: var(--accent); border: none; color: #111; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+  .btn.secondary { background: var(--soft); color: var(--text); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 8px; border-bottom: 1px solid #2b3d56; text-align: left; }
+  input, select, textarea { width: 100%; margin-bottom: 10px; border: 1px solid #30465f; background: #122033; color: var(--text); border-radius: 8px; padding: 8px; }
+  .row { display: flex; gap: 12px; }
+  .row > * { flex: 1; }
+  .actions form { display: inline-block; margin-right: 6px; }
+</style>
+
+<div class="topbar">
+  <div class="links">
+    <a href="/">Dashboard</a>
+    <a href="/contents">Nội dung</a>
+    <a href="/menus">Menu</a>
+    <% if (currentUser && currentUser.role === "admin") { %>
+      <a href="/users">Người dùng</a>
+    <% } %>
+  </div>
+  <div>
+    <% if (currentUser) { %>
+      <span class="badge"><%= currentUser.username %> - <%= currentUser.role %></span>
+      <form action="/logout" method="POST" style="display:inline-block; margin-left:8px;">
+        <button class="btn secondary" type="submit">Logout</button>
+      </form>
+    <% } %>
+  </div>
+</div>

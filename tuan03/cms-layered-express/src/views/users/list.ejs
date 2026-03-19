@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="container">
+    <div class="card">
+      <h2>Quản lý người dùng và phân quyền</h2>
+      <a class="btn" href="/users/new">Tạo người dùng</a>
+      <table>
+        <thead><tr><th>Username</th><th>Role</th><th>Cập nhật vai trò</th></tr></thead>
+        <tbody>
+          <% users.forEach((u) => { %>
+            <tr>
+              <td><%= u.username %></td>
+              <td><%= u.role %></td>
+              <td>
+                <form method="POST" action="/users/<%= u._id %>/role?_method=PUT">
+                  <select name="role" style="max-width:180px; display:inline-block; margin-right:8px;">
+                    <% ['admin','editor','contributor'].forEach((r) => { %>
+                      <option value="<%= r %>" <%= u.role === r ? 'selected' : '' %>><%= r %></option>
+                    <% }) %>
+                  </select>
+                  <button class="btn secondary" type="submit">Lưu</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

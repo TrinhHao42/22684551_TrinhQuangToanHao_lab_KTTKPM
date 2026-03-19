@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('./partials/nav') %>
+  <div class="container">
+    <div class="card">
+      <h2>Layered Architecture CMS</h2>
+      <p>Mô hình: UI -> Controller -> Service -> Repository -> Model -> MongoDB.</p>
+      <div class="row">
+        <div class="card"><h3><%= stats.contents %></h3><p>Tổng nội dung</p></div>
+        <div class="card"><h3><%= stats.published %></h3><p>Đã xuất bản</p></div>
+        <div class="card"><h3><%= stats.menus %></h3><p>Menu</p></div>
+        <div class="card"><h3><%= stats.users %></h3><p>Người dùng</p></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="container">
+    <div class="card" style="max-width:500px;">
+      <h2>Tạo người dùng mới</h2>
+      <form method="POST" action="<%= action %>">
+        <label>Username</label>
+        <input name="username" required />
+        <label>Password</label>
+        <input type="password" name="password" required />
+        <label>Role</label>
+        <select name="role">
+          <option value="contributor">contributor</option>
+          <option value="editor">editor</option>
+          <option value="admin">admin</option>
+        </select>
+        <button class="btn" type="submit">Tạo</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<style>
+  :root {
+    --bg: #121212;
+    --card: #1f1f1f;
+    --ink: #f2f2f2;
+    --muted: #a7a7a7;
+    --accent: #2ec4b6;
+    --accent2: #ff9f1c;
+  }
+  body { margin: 0; font-family: "Trebuchet MS", sans-serif; color: var(--ink); background: linear-gradient(120deg, #181818, #111); }
+  .topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; border-bottom: 1px solid #2a2a2a; background: rgba(17, 17, 17, 0.92); }
+  .topbar a { color: var(--ink); text-decoration: none; margin-right: 14px; }
+  .topbar a:hover { color: var(--accent); }
+  .chip { background: #243b3b; color: #9de8df; border-radius: 999px; padding: 4px 10px; font-size: 12px; }
+  .container { max-width: 1024px; margin: 22px auto; padding: 0 14px; }
+  .card { background: var(--card); border: 1px solid #2d2d2d; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  .btn { background: var(--accent); color: #081111; border: none; border-radius: 8px; padding: 8px 12px; font-weight: 700; cursor: pointer; }
+  .btn.alt { background: var(--accent2); }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border-bottom: 1px solid #2b2b2b; padding: 8px; text-align: left; }
+  input, select, textarea { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #333; background: #151515; color: #fff; margin-bottom: 10px; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+</style>
+
+<div class="topbar">
+  <div>
+    <a href="/">Dashboard</a>
+    <a href="/admin/posts">Post Plugin</a>
+    <a href="/admin/menus">Menu Plugin</a>
+    <% if (user && user.role === 'admin') { %>
+      <a href="/admin/users">User Plugin</a>
+    <% } %>
+  </div>
+  <div>
+    <% if (user) { %>
+      <span class="chip"><%= user.username %> | <%= user.role %></span>
+      <form action="/logout" method="POST" style="display:inline-block; margin-left:8px;">
+        <button class="btn alt" type="submit">Logout</button>
+      </form>
+    <% } %>
+  </div>
+</div>

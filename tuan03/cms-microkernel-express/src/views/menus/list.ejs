@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/nav', { user }) %>
+  <div class="container">
+    <div class="card">
+      <h2>Menu Plugin - Quản lý menu và điều hướng</h2>
+      <form method="POST" action="/admin/menus" class="row" style="align-items:flex-end;">
+        <div><label>Name</label><input name="name" required /></div>
+        <div><label>Path</label><input name="path" required placeholder="/news" /></div>
+        <div><label>Order</label><input type="number" name="order" value="0" /></div>
+        <div><button class="btn" type="submit">Thêm menu</button></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead><tr><th>Name</th><th>Path</th><th>Order</th><th></th></tr></thead>
+        <tbody>
+          <% menus.forEach((m) => { %>
+            <tr>
+              <td><%= m.name %></td>
+              <td><%= m.path %></td>
+              <td><%= m.order %></td>
+              <td>
+                <form method="POST" action="/admin/menus/<%= m._id %>?_method=DELETE" style="display:inline-block">
+                  <button class="btn alt" type="submit">Xóa</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

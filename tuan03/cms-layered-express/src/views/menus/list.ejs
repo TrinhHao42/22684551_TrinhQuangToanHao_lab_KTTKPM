@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="container">
+    <div class="card">
+      <h2>Quản lý menu và điều hướng</h2>
+      <% const canManageMenus = ['admin', 'editor'].includes(user?.role); %>
+      <% if (canManageMenus) { %>
+        <form method="POST" action="/menus" class="row" style="align-items:flex-end;">
+          <div><label>Name</label><input name="name" required /></div>
+          <div><label>Path</label><input name="path" required placeholder="/about" /></div>
+          <div><label>Order</label><input type="number" name="order" value="0" /></div>
+          <div><button class="btn" type="submit">Thêm menu</button></div>
+        </form>
+      <% } else { %>
+        <p>Bạn đang ở chế độ chỉ xem. Chỉ admin/editor mới được chỉnh sửa menu.</p>
+      <% } %>
+
+      <table>
+        <thead><tr><th>Name</th><th>Path</th><th>Order</th><th>Visible</th><th></th></tr></thead>
+        <tbody>
+          <% menus.forEach((m) => { %>
+            <tr>
+              <td><%= m.name %></td>
+              <td><%= m.path %></td>
+              <td><%= m.order %></td>
+              <td><%= m.visible ? 'Yes' : 'No' %></td>
+              <td>
+                <% if (canManageMenus) { %>
+                  <form method="POST" action="/menus/<%= m._id %>?_method=PUT" style="display:inline-block">
+                    <input type="hidden" name="name" value="<%= m.name %>" />
+                    <input type="hidden" name="path" value="<%= m.path %>" />
+                    <input type="hidden" name="order" value="<%= m.order %>" />
+                    <input type="hidden" name="visible" value="<%= !m.visible %>" />
+                    <button class="btn secondary" type="submit"><%= m.visible ? 'Ẩn' : 'Hiện' %></button>
+                  </form>
+                  <form method="POST" action="/menus/<%= m._id %>?_method=DELETE" style="display:inline-block">
+                    <button class="btn secondary" type="submit">Xóa</button>
+                  </form>
+                <% } else { %>
+                  <span>-</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title><%= title %></title>
+</head>
+<body>
+  <%- include('../partials/nav', { user }) %>
+  <div class="container">
+    <div class="card">
+      <h2>User Plugin - Quản lý người dùng và phân quyền</h2>
+      <form method="POST" action="/admin/users" class="row" style="align-items:flex-end;">
+        <div><label>Username</label><input name="username" required /></div>
+        <div><label>Password</label><input type="password" name="password" required /></div>
+        <div>
+          <label>Role</label>
+          <select name="role">
+            <option value="contributor">contributor</option>
+            <option value="editor">editor</option>
+            <option value="admin">admin</option>
+          </select>
+        </div>
+        <div><button class="btn" type="submit">Tạo user</button></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead><tr><th>Username</th><th>Role</th><th>Cập nhật</th></tr></thead>
+        <tbody>
+          <% users.forEach((u) => { %>
+            <tr>
+              <td><%= u.username %></td>
+              <td><%= u.role %></td>
+              <td>
+                <form method="POST" action="/admin/users/<%= u._id %>/role?_method=PUT">
+                  <select name="role" style="max-width:180px; display:inline-block; margin-right:8px;">
+                    <% ['admin','editor','contributor'].forEach((r) => { %>
+                      <option value="<%= r %>" <%= u.role === r ? 'selected' : '' %>><%= r %></option>
+                    <% }) %>
+                  </select>
+                  <button class="btn alt" type="submit">Lưu</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
