@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Microservices</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        section { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; }
+        input, textarea, button { margin: 5px 0; width: 100%; }
+        button { padding: 8px; cursor: pointer; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>🚀 Test Microservices</h1>
+
+<!-- SHIPPING -->
+<section>
+    <h2>Shipping (8080)</h2>
+
+    <button onclick="getAll('shipping')">Get All</button>
+
+    <input id="shippingId" placeholder="ID">
+    <button onclick="getById('shipping')">Get By ID</button>
+
+    <textarea id="shippingBody" placeholder='JSON body'></textarea>
+    <button onclick="create('shipping')">Create</button>
+    <button onclick="update('shipping')">Update</button>
+
+    <button onclick="remove('shipping')">Delete</button>
+
+    <pre id="shippingResult"></pre>
+</section>
+
+<!-- ORDER -->
+<section>
+    <h2>Order (8081)</h2>
+
+    <button onclick="getAll('order')">Get All</button>
+
+    <input id="orderId" placeholder="ID">
+    <button onclick="getById('order')">Get By ID</button>
+
+    <textarea id="orderBody" placeholder='JSON body'></textarea>
+    <button onclick="create('order')">Create</button>
+    <button onclick="update('order')">Update</button>
+
+    <button onclick="remove('order')">Delete</button>
+
+    <pre id="orderResult"></pre>
+</section>
+
+<!-- PAYMENT -->
+<section>
+    <h2>Payment (8082)</h2>
+
+    <button onclick="getAll('payment')">Get All</button>
+
+    <input id="paymentId" placeholder="ID">
+    <button onclick="getById('payment')">Get By ID</button>
+
+    <textarea id="paymentBody" placeholder='JSON body'></textarea>
+    <button onclick="create('payment')">Create</button>
+    <button onclick="update('payment')">Update</button>
+
+    <button onclick="remove('payment')">Delete</button>
+
+    <pre id="paymentResult"></pre>
+</section>
+
+<script>
+    const baseUrls = {
+        shipping: "http://localhost:8080/shippings",
+        order: "http://localhost:8081/orders",
+        payment: "http://localhost:8082/payments"
+    };
+
+    async function getAll(type) {
+        const res = await fetch(baseUrls[type]);
+        const data = await res.json();
+        document.getElementById(type + "Result").innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function getById(type) {
+        const id = document.getElementById(type + "Id").value;
+        const res = await fetch(`${baseUrls[type]}/${id}`);
+        const data = await res.json();
+        document.getElementById(type + "Result").innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function create(type) {
+        const body = document.getElementById(type + "Body").value;
+
+        const res = await fetch(baseUrls[type], {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        });
+
+        const data = await res.json();
+        document.getElementById(type + "Result").innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function update(type) {
+        const id = document.getElementById(type + "Id").value;
+        const body = document.getElementById(type + "Body").value;
+
+        const res = await fetch(`${baseUrls[type]}/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        });
+
+        const data = await res.json();
+        document.getElementById(type + "Result").innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function remove(type) {
+        const id = document.getElementById(type + "Id").value;
+
+        await fetch(`${baseUrls[type]}/${id}`, {
+            method: "DELETE"
+        });
+
+        document.getElementById(type + "Result").innerText = "Deleted!";
+    }
+</script>
+
+</body>
+</html>

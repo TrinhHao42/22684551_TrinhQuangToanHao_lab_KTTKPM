@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: shippingService
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: sapassword
+    url: jdbc:mariadb://localhost:3306/tuan05
+  jpa:
+    hibernate:
+      ddl-auto: update
+
