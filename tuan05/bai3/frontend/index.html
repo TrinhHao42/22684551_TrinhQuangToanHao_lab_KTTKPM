@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices API Tester | API Gateway</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent-color: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #020617, #0f172a);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 60px auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .panel {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .controls-grid { grid-template-columns: 1fr; }
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, textarea {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 14px;
+            font-family: 'Inter', monospace;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 180px;
+            font-family: monospace;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+
+        button.action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        button.action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        button.action-btn.primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        button.action-btn.primary:hover {
+            background: var(--primary-hover);
+        }
+        
+        button.action-btn.danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        button.action-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .result-box {
+            background: #000;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            border: 1px solid var(--border-color);
+            min-height: 200px;
+            overflow-x: auto;
+        }
+
+        .result-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        
+        .gateway-url {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Microservices API Tester</h1>
+        <p class="subtitle">Test all your backend services easily using a single interface</p>
+        <div class="gateway-url">Routing via API Gateway (http://localhost:8080)</div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('order')">Order Service</button>
+        <button class="tab-btn" onclick="switchTab('shipping')">Shipping Service</button>
+        <button class="tab-btn" onclick="switchTab('payment')">Payment Service</button>
+    </div>
+
+    <!-- ORDER -->
+    <div id="order" class="panel active">
+        <div class="controls-grid">
+            <div class="left-col">
+                <div class="input-group" style="margin-bottom: 20px">
+                    <label for="order-id">Item ID (For Get/Update/Delete)</label>
+                    <input id="order-id" placeholder="e.g. 1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="order-body">JSON Payload</label>
+                    <textarea id="order-body" placeholder='{\n  "property": "value"\n}'></textarea>
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn" onclick="request('order', 'GET')">Get All</button>
+                    <button class="action-btn" onclick="request('order', 'GET', true)">Get By ID</button>
+                    <button class="action-btn primary" onclick="request('order', 'POST', false, true)">Create</button>
+                    <button class="action-btn" onclick="request('order', 'PUT', true, true)">Update</button>
+                    <button class="action-btn danger" onclick="request('order', 'DELETE', true)">Delete</button>
+                </div>
+            </div>
+            <div class="right-col">
+                <label>Response</label>
+                <div class="result-box">
+                    <div class="badge">/orders</div>
+                    <pre id="order-result">Result will appear here...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHIPPING -->
+    <div id="shipping" class="panel">
+        <div class="controls-grid">
+            <div class="left-col">
+                <div class="input-group" style="margin-bottom: 20px">
+                    <label for="shipping-id">Item ID (For Get/Update/Delete)</label>
+                    <input id="shipping-id" placeholder="e.g. 1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="shipping-body">JSON Payload</label>
+                    <textarea id="shipping-body" placeholder='{\n  "property": "value"\n}'></textarea>
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn" onclick="request('shipping', 'GET')">Get All</button>
+                    <button class="action-btn" onclick="request('shipping', 'GET', true)">Get By ID</button>
+                    <button class="action-btn primary" onclick="request('shipping', 'POST', false, true)">Create</button>
+                    <button class="action-btn" onclick="request('shipping', 'PUT', true, true)">Update</button>
+                    <button class="action-btn danger" onclick="request('shipping', 'DELETE', true)">Delete</button>
+                </div>
+            </div>
+            <div class="right-col">
+                <label>Response</label>
+                <div class="result-box">
+                    <div class="badge">/shippings</div>
+                    <pre id="shipping-result">Result will appear here...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div id="payment" class="panel">
+        <div class="controls-grid">
+            <div class="left-col">
+                <div class="input-group" style="margin-bottom: 20px">
+                    <label for="payment-id">Item ID (For Get/Update/Delete)</label>
+                    <input id="payment-id" placeholder="e.g. 1">
+                </div>
+                
+                <div class="input-group">
+                    <label for="payment-body">JSON Payload</label>
+                    <textarea id="payment-body" placeholder='{\n  "property": "value"\n}'></textarea>
+                </div>
+                
+                <div class="actions">
+                    <button class="action-btn" onclick="request('payment', 'GET')">Get All</button>
+                    <button class="action-btn" onclick="request('payment', 'GET', true)">Get By ID</button>
+                    <button class="action-btn primary" onclick="request('payment', 'POST', false, true)">Create</button>
+                    <button class="action-btn" onclick="request('payment', 'PUT', true, true)">Update</button>
+                    <button class="action-btn danger" onclick="request('payment', 'DELETE', true)">Delete</button>
+                </div>
+            </div>
+            <div class="right-col">
+                <label>Response</label>
+                <div class="result-box">
+                    <div class="badge">/payments</div>
+                    <pre id="payment-result">Result will appear here...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const gatewayUrl = "http://localhost:8080";
+    const endpoints = {
+        order: "/orders",
+        shipping: "/shippings",
+        payment: "/payments"
+    };
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+        
+        document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    async function request(service, method, useId = false, useBody = false) {
+        const resultBox = document.getElementById(`${service}-result`);
+        resultBox.innerText = "Loading...";
+        resultBox.style.color = "var(--text-muted)";
+
+        try {
+            let url = `${gatewayUrl}${endpoints[service]}`;
+            
+            if (useId) {
+                const id = document.getElementById(`${service}-id`).value.trim();
+                if (!id) {
+                    throw new Error("Target ID is required for this action");
+                }
+                url += `/${id}`;
+            }
+
+            const options = { method };
+            
+            if (useBody) {
+                const bodyContent = document.getElementById(`${service}-body`).value.trim();
+                if (!bodyContent) {
+                    throw new Error("JSON Body is required for Create/Update");
+                }
+                
+                // Validate JSON parsing locally before sending to prevent unclear server errors
+                try {
+                    JSON.parse(bodyContent);
+                } catch(e) {
+                    throw new Error("Invalid format: " + e.message);
+                }
+
+                options.headers = { "Content-Type": "application/json" };
+                options.body = bodyContent;
+            }
+
+            const response = await fetch(url, options);
+            
+            let data;
+            const contentType = response.headers.get("content-type");
+            try {
+                if (contentType && contentType.includes("application/json")) {
+                    data = await response.json();
+                } else {
+                    data = await response.text();
+                }
+            } catch (e) {
+                data = await response.text();
+            }
+
+            if (!response.ok) {
+                throw new Error(`${response.status} ${response.statusText}\n${typeof data === 'object' ? JSON.stringify(data, null, 2) : data || ''}`);
+            }
+
+            resultBox.innerText = typeof data === 'object' ? JSON.stringify(data, null, 2) : (data || `${method} successful, but background returned no content`);
+            resultBox.style.color = "var(--success-color)";
+        } catch (error) {
+            resultBox.innerText = `Error: ${error.message}`;
+            resultBox.style.color = "var(--error-color)";
+        }
+    }
+</script>
+
+</body>
+</html>
