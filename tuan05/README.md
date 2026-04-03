@@ -89,7 +89,7 @@ Trong microservices, có hai cách phổ biến để điều phối workflow (l
    - **Tạo ra nút thắt (Bottleneck):** Orchestrator trở thành trung tâm chịu tải của hệ thống. Nếu orchestrator bị quá tải hay sập, toàn bộ workflow bị kẹt lại.
    - **Gắn kết chặt (Coupling cao ở trung tâm):** Orchestrator chứa quá nhiều logic nghiệp vụ, phải biết mọi API của các service khác, dẫn đến một monolithic "vô hình" bên trong microservices (God service).
 
-## 2. Choreography (Phối hợp phi tập trung)
+## 2. Choreography (Phối hợp phi tập trung).
 ![alt text](minhchung/bai4_Choreography.png)
 
  - **Ưu điểm:**
