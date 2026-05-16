@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+#root {
+  width: 100%;
+}
