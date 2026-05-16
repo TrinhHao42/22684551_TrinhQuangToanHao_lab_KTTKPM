@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  mariadb:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: appdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - food-service
+      - order-service
+
+  user-service:
+    build: ./services/user-service
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=root
+      - DB_PASS=rootpass
+      - DB_NAME=appdb
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mariadb
+      - rabbitmq
+
+  food-service:
+    build: ./services/food-service
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=root
+      - DB_PASS=rootpass
+      - DB_NAME=appdb
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mariadb
+
+  order-service:
+    build: ./services/order-service
+    environment:
+      - DB_HOST=mariadb
+      - DB_USER=root
+      - DB_PASS=rootpass
+      - DB_NAME=appdb
+      - RABBITMQ_URL=amqp://rabbitmq
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mariadb
+      - rabbitmq
+
+  payment-service:
+    build: ./services/payment-service
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+      - DB_HOST=mariadb
+      - DB_USER=root
+      - DB_PASS=rootpass
+      - DB_NAME=appdb
+    ports:
+      - "8084:8084"
+    depends_on:
+      - rabbitmq
+      - mariadb
+
+  notification-service:
+    build: ./services/notification-service
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8085:8085"
+    depends_on:
+      - rabbitmq
+      - redis
+
+volumes:
+  db_data:

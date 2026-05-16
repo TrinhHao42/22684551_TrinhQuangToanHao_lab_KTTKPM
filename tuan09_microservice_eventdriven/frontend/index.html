@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Food Delivery UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; }
+    .box { border: 1px solid #ddd; padding: 12px; margin-bottom: 12px; }
+    input, button, select { padding: 6px; margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <h1>Mini Food Delivery</h1>
+
+  <div class="box" id="auth">
+    <h2>Auth</h2>
+    <div>
+      <input id="username" placeholder="username" />
+      <input id="password" placeholder="password" type="password" />
+      <button id="btnRegister">Register</button>
+      <button id="btnLogin">Login</button>
+    </div>
+    <div id="loginResult"></div>
+  </div>
+
+  <div class="box" id="foods">
+    <h2>Foods</h2>
+    <button id="btnLoadFoods">Load foods</button>
+    <ul id="foodList"></ul>
+  </div>
+
+  <div class="box" id="order">
+    <h2>Place Order</h2>
+    <select id="selectFood"></select>
+    <input id="amount" type="number" placeholder="amount" value="1" />
+    <button id="btnOrder">Order</button>
+    <div id="orderResult"></div>
+  </div>
+
+  <div class="box" id="orders">
+    <h2>Orders</h2>
+    <button id="btnLoadOrders">Load orders</button>
+    <ul id="orderList"></ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
